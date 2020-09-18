@@ -14,7 +14,7 @@ defmodule SwsPhx.Schemas.DeviceData do
 
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:device_id, :device_data_type_id, :value])
-    |> validate_required([:device_id, :device_data_type_id, :value])
+    |> cast(attrs, [:device_id, :device_data_type_id, :value, :timestamp])
+    |> validate_required([:device_id, :device_data_type_id, :value, :timestamp])
   end
 end
