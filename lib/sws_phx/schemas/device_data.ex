@@ -9,6 +9,7 @@ defmodule SwsPhx.Schemas.DeviceData do
     belongs_to :device, Device
     belongs_to :device_data_type, DeviceDataType
     field :value, :string
+    field :timestamp, :utc_datetime
   end
 
   def changeset(user, attrs) do
