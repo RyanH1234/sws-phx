@@ -14,7 +14,7 @@ defmodule SwsPhxWeb.DeviceController do
       }
   end
 
-  def insert_device_data(conn, %{"type" => type_description, "value" => value, "device_id" => did} = params) do
+  def insert_device_data(conn, %{"timestamp" => timestamp, "type" => type_description, "value" => value, "device_id" => did} = params) do
     # debug
     params |> IO.inspect()
 
@@ -26,6 +26,7 @@ defmodule SwsPhxWeb.DeviceController do
       device_data_type_id: type_id,
       value: value,
       device_id: did,
+      timestamp: timestamp
     } |> IO.inspect()
 
     # insert into database
