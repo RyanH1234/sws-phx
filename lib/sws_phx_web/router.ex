@@ -37,6 +37,9 @@ defmodule SwsPhxWeb.Router do
 
     options "/all", UserController, :options
     get "/all", UserController, :get_all_devices
+
+    options "/data", UserController, :options
+    get "/data", UserController, :get_device_data
   end
 
   scope "/device", SwsPhxWeb do

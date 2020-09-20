@@ -1,10 +1,13 @@
 defmodule SwsPhxWeb.UserController do
   use SwsPhxWeb, :controller
+  import Ecto.Query, only: [from: 2]
 
   alias SwsPhx.Auth
   alias SwsPhx.Repo
   alias SwsPhx.Schemas.User
   alias SwsPhx.Schemas.Device
+  alias SwsPhx.Schemas.DeviceData
+  alias SwsPhx.Schemas.DeviceDataType
 
   def login(conn, %{"params" => %{"email" => email, "password" => password}}) do
     auth = Auth.login_by_email_and_pwd(conn, email, password, repo: Repo)
@@ -42,14 +45,41 @@ defmodule SwsPhxWeb.UserController do
       Repo.get(User, uid)
       |> Repo.preload(:devices)
 
-    devices = Enum.map(resp.devices, fn device ->
-      %{
-        id: device.id,
-        name: device.name,
-      }
-    end)
+    devices =
+      Enum.map(resp.devices, fn device ->
+        %{
+          id: device.id,
+          name: device.name
+        }
+      end)
 
     json(conn, devices)
+  end
+
+  defp get_device_data(did) do
+    from dd in DeviceData,
+      where: dd.device_id == ^did,
+      join: ddt in DeviceDataType,
+      on: ddt.id == dd.device_data_type_id,
+      limit: 500,
+      select: %{
+        type: ddt.description,
+        type_id: ddt.id,
+        value: dd.value,
+        device_id: dd.device_id,
+        timestamp: dd.timestamp
+      }
+  end
+
+  def get_device_data(conn, %{"did" => did}) do
+    did = String.to_integer(did)
+
+    device_data =
+      get_device_data(did)
+      |> Repo.all()
+      |> Enum.group_by(& &1.type)
+
+    json(conn, device_data)
   end
 
   def options(conn, _params), do: json(conn, :ok)
