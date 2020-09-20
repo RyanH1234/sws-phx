@@ -15,9 +15,10 @@ config :sws_phx, SwsPhxWeb.Endpoint,
   check_origin: false,
   watchers: []
 
-config :sws_phx, SwsPhx.Guardian,
-  secret_key: "SpuuHArl+iPP97SpAMEfo+wMpIxMe+mGM84YqkIY9wwW8Ghx9mvxU+hHQqgKbVtH"
-
 config :logger, :console, format: "[$level] $message\n"
 config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
+
+if File.exists?("./config/dev.secret.exs") do
+  import_config "dev.secret.exs"
+end
