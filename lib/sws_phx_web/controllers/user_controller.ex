@@ -63,30 +63,40 @@ defmodule SwsPhxWeb.UserController do
     json(conn, devices)
   end
 
-  defp get_device_data(did) do
+  defp get_device_data_ts(did, start_utc, end_utc) do
     from dd in DeviceData,
       where: dd.device_id == ^did,
       join: ddt in DeviceDataType,
       on: ddt.id == dd.device_data_type_id,
-      limit: 500,
+      where: dd.timestamp > ^start_utc,
+      where: dd.timestamp < ^end_utc,
       select: %{
         type: ddt.description,
         type_id: ddt.id,
         value: dd.value,
         device_id: dd.device_id,
-        timestamp: dd.timestamp
+        timestamp: dd.timestamp,
+        unit: ddt.unit
       }
   end
 
-  def get_device_data(conn, %{"did" => did}) do
-    did = String.to_integer(did)
-
-    device_data =
-      get_device_data(did)
+  def get_device_data(conn, %{"did" => did, "start" => start_utc, "end" => end_utc}) do
+    ts_data =
+      get_device_data_ts(did, start_utc, end_utc)
       |> Repo.all()
+      |> Enum.map(fn data ->
+        case data.unit do
+          nil ->
+            data
+
+          _ ->
+            type = (data.type <> " " <> data.unit) |> IO.inspect()
+            %{data | type: type}
+        end
+      end)
       |> Enum.group_by(& &1.type)
 
-    json(conn, device_data)
+    json(conn, ts_data)
   end
 
   defp get_all_device_data(did) do
@@ -100,7 +110,8 @@ defmodule SwsPhxWeb.UserController do
         type_id: ddt.id,
         value: dd.value,
         device_id: dd.device_id,
-        timestamp: dd.timestamp
+        timestamp: dd.timestamp,
+        unit: ddt.unit
       }
   end
 

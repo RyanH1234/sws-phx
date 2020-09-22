@@ -13,16 +13,16 @@ alias SwsPhx.Schemas.Device
 
 # DEVICE DATA TYPES
 Repo.insert!(%DeviceDataType{
-  description: "temperature",
+  description: "temperature", unit: "°C"
 })
 Repo.insert!(%DeviceDataType{
-  description: "pressure"
+  description: "pressure", unit: "kPa"
 })
 Repo.insert!(%DeviceDataType{
-  description: "humidity"
+  description: "humidity", unit: "g.kg-1"
 })
 Repo.insert!(%DeviceDataType{
-  description: "soil temp"
+  description: "soil temp", unit: "°C"
 })
 Repo.insert!(%DeviceDataType{
   description: "soil moisture level"

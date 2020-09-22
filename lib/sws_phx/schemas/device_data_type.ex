@@ -5,11 +5,12 @@ defmodule SwsPhx.Schemas.DeviceDataType do
 
   schema "device_data_types" do
     field :description, :string
+    field :unit, :string
   end
 
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:description])
+    |> cast(attrs, [:description, :unit])
     |> validate_required([:description])
   end
 end
