@@ -34,6 +34,7 @@ defmodule SwsPhxWeb.Router do
 
     options "/", UserController, :options
     post "/", UserController, :add_device
+    delete "/", UserController, :delete_device
 
     options "/all", UserController, :options
     get "/all", UserController, :get_all_devices

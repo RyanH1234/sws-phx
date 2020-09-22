@@ -7,7 +7,6 @@ defmodule SwsPhx.Schemas.Device do
 
   schema "devices" do
     field :name, :string
-    field :identifier, :string
     belongs_to :user, User
     has_many :watering_systems, WateringSystem
   end

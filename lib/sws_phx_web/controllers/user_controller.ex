@@ -39,6 +39,13 @@ defmodule SwsPhxWeb.UserController do
     json(conn, "success")
   end
 
+  def delete_device(conn, %{"did" => did}) do
+    did = String.to_integer(did)
+    device_changeset = %Device{id: did}
+    Repo.delete(device_changeset)
+    json(conn, "success")
+  end
+
   # localhost:4000/user/device/all?uid=8
   def get_all_devices(conn, %{"uid" => uid}) do
     resp =
