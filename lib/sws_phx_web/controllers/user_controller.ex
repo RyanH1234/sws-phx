@@ -90,7 +90,7 @@ defmodule SwsPhxWeb.UserController do
             data
 
           _ ->
-            type = (data.type <> " " <> data.unit) |> IO.inspect()
+            type = (data.type <> " " <> data.unit)
             %{data | type: type}
         end
       end)
