@@ -89,5 +89,48 @@ defmodule SwsPhxWeb.UserController do
     json(conn, device_data)
   end
 
+  defp get_all_device_data(did) do
+    from dd in DeviceData,
+      where: dd.device_id == ^did,
+      join: ddt in DeviceDataType,
+      on: ddt.id == dd.device_data_type_id,
+      order_by: [desc: dd.timestamp],
+      select: %{
+        type: ddt.description,
+        type_id: ddt.id,
+        value: dd.value,
+        device_id: dd.device_id,
+        timestamp: dd.timestamp
+      }
+  end
+
+  def get_dash_data(conn, %{"uid" => uid}) do
+    user =
+      Repo.get(User, uid)
+      |> Repo.preload(:devices)
+
+    device_ids = Enum.map(user.devices, & &1.id)
+
+    dash_data =
+      Enum.map(device_ids, fn did ->
+        device_data =
+          get_all_device_data(did)
+          |> Repo.all()
+          |> Enum.group_by(& &1.type)
+          |> Enum.map(fn {_type, [latest_value | _tail]} ->
+            %{
+              latest_value: latest_value
+            }
+          end)
+
+        %{
+          device_id: did,
+          device_data: device_data
+        }
+      end)
+
+    json(conn, dash_data)
+  end
+
   def options(conn, _params), do: json(conn, :ok)
 end

@@ -27,6 +27,9 @@ defmodule SwsPhxWeb.Router do
 
     options "/login", UserController, :options
     post "/login", UserController, :login
+
+    options "/dash", UserController, :options
+    get "/dash", UserController, :get_dash_data
   end
 
   scope "/user/device", SwsPhxWeb do

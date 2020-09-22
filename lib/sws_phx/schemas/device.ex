@@ -4,11 +4,13 @@ defmodule SwsPhx.Schemas.Device do
 
   alias SwsPhx.Schemas.User
   alias SwsPhx.Schemas.WateringSystem
+  alias SwsPhx.Schemas.DeviceData
 
   schema "devices" do
     field :name, :string
     belongs_to :user, User
     has_many :watering_systems, WateringSystem
+    has_many :device_datas, DeviceData
   end
 
   def changeset(user, attrs) do
