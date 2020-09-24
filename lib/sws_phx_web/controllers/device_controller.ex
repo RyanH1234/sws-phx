@@ -5,6 +5,7 @@ defmodule SwsPhxWeb.DeviceController do
   alias SwsPhx.Repo
   alias SwsPhx.Schemas.DeviceData
   alias SwsPhx.Schemas.DeviceDataType
+  alias SwsPhx.Schemas.WateringSystem
 
   defp get_type_id(description) do
     from ddt in DeviceDataType,
@@ -39,6 +40,20 @@ defmodule SwsPhxWeb.DeviceController do
         # insert into database
         device_data_changeset = DeviceData.changeset(%DeviceData{}, params)
         Repo.insert!(device_data_changeset)
+        json(conn, "success")
+
+      false ->
+        json(conn, "error")
+    end
+  end
+
+  def insert_watering_system_data(conn, %{"token" => token} = params) do
+    secret_key = Application.get_env(:sws_phx, SwsPhx.Guardian)[:secret_key]
+
+    case secret_key == token do
+      true ->
+        watering_system_changeset = WateringSystem.changeset(%WateringSystem{}, params)
+        Repo.insert!(watering_system_changeset)
         json(conn, "success")
 
       false ->

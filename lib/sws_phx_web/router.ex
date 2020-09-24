@@ -51,5 +51,8 @@ defmodule SwsPhxWeb.Router do
 
     options "/", DeviceController, :options
     post "/", DeviceController, :insert_device_data
+
+    options "/watering", DeviceController, :options
+    post "/watering", DeviceController, :insert_watering_system_data
   end
 end
