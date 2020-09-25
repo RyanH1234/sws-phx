@@ -16,7 +16,7 @@ defmodule SwsPhx.Schemas.WateringSystem do
 
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :user_id, :device_id, :relay_output_1, :relay_output_2, :relay_output_3, :relay_output_4])
-    |> validate_required([:name, :user_id, :device_id])
+    |> cast(attrs, [:device_id, :timestamp, :relay_output_1, :relay_output_2, :relay_output_3, :relay_output_4])
+    |> validate_required([:device_id, :timestamp, :relay_output_1, :relay_output_2, :relay_output_3, :relay_output_4])
   end
 end
