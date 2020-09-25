@@ -6,10 +6,10 @@ defmodule SwsPhx.Schemas.WateringSystem do
 
   schema "watering_systems" do
     field :timestamp, :utc_datetime
-    field :relay_output_1, :integer
-    field :relay_output_2, :integer
-    field :relay_output_3, :integer
-    field :relay_output_4, :integer
+    field :relay_output_1, :boolean
+    field :relay_output_2, :boolean
+    field :relay_output_3, :boolean
+    field :relay_output_4, :boolean
 
     belongs_to :device, Device
   end
