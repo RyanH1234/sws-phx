@@ -96,7 +96,7 @@ defmodule SwsPhxWeb.UserController do
       end)
       |> Enum.group_by(& &1.type)
       |> Enum.reduce(%{}, fn {attr, data}, acc ->
-        sorted = Enum.sort_by(data, & &1.timestamp)
+        sorted = Enum.sort(data, &(DateTime.compare(&1.timestamp, &2.timestamp) != :gt))
         Map.put(acc, attr, sorted)
       end)
 
